@@ -2,15 +2,12 @@ package kr.ac.kopo.jeong.pj_submission_site.controller;
 
 import kr.ac.kopo.jeong.pj_submission_site.model.Lecture;
 import kr.ac.kopo.jeong.pj_submission_site.model.User;
-import kr.ac.kopo.jeong.pj_submission_site.repository.UserRepository;
-import kr.ac.kopo.jeong.pj_submission_site.service.LectureService;
+import kr.ac.kopo.jeong.pj_submission_site.repository.LectureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -19,23 +16,30 @@ import java.security.Principal;
 public class LectureController {
 
     @Autowired
-    private LectureService lectureService;
-
-    @Autowired
-    private UserRepository userRepository;
+    private LectureRepository lectureRepository;
 
     @GetMapping("/create")
+    @PreAuthorize("hasRole('PROFESSOR')")
     public String showCreateForm(Model model) {
         model.addAttribute("lecture", new Lecture());
-        return "createLecture"; // templates/createLecture.html
+        return "createLecture"; // createLecture.html
     }
 
     @PostMapping("/create")
-    public String createLecture(@ModelAttribute Lecture lecture, Principal principal) {
-        User professor = userRepository.findByUsername(principal.getName()).orElseThrow();
-        lecture.setProfessor(professor);
-        lectureService.createLecture(lecture.getTitle(), lecture.getDescription(), professor);
+    @PreAuthorize("hasRole('PROFESSOR')")
+    public String createLecture(@RequestParam String title,
+                                @RequestParam String description,
+                                Principal principal) {
+        User professor = userRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("교수 정보를 찾을 수 없습니다."));
+
+        Lecture lecture = new Lecture();
+        lecture.setTitle(title);
+        lecture.setDescription(description);
+        lecture.setProfessorId(professor.getId());
+
+        lectureRepository.save(lecture);
         return "redirect:/home";
     }
-}
 
+}

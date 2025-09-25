@@ -19,5 +19,8 @@ public class Lecture {
     @ManyToOne
     @JoinColumn(name = "professor_id")
     private User professor; // 강의를 생성한 교수
+    private String professorUsername;
+    private String professorId;
+
 }
 
