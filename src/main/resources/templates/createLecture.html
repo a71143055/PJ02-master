@@ -1,0 +1,6 @@
+<h2>강의 생성</h2>
+<form th:action="@{/lectures/create}" th:object="${lecture}" method="post">
+    <input type="text" th:field="*{title}" placeholder="강의명" required />
+    <textarea th:field="*{description}" placeholder="강의 설명"></textarea>
+    <button type="submit">생성</button>
+</form>
