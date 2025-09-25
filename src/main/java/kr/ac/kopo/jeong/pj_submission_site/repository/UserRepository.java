@@ -2,6 +2,7 @@ package kr.ac.kopo.jeong.pj_submission_site.repository;
 
 import jakarta.transaction.Transactional;
 import kr.ac.kopo.jeong.pj_submission_site.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

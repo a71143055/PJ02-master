@@ -3,6 +3,7 @@ package kr.ac.kopo.jeong.pj_submission_site.controller;
 import kr.ac.kopo.jeong.pj_submission_site.model.Lecture;
 import kr.ac.kopo.jeong.pj_submission_site.model.User;
 import kr.ac.kopo.jeong.pj_submission_site.repository.LectureRepository;
+import kr.ac.kopo.jeong.pj_submission_site.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,10 @@ public class LectureController {
 
     @Autowired
     private LectureRepository lectureRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     @GetMapping("/create")
     @PreAuthorize("hasRole('PROFESSOR')")
